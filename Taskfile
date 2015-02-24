@@ -1,0 +1,2 @@
+default: velveth ${TMP_DIR} 31 -fastq.gz -shortPaired ${READS} && velvetg ${TMP_DIR} -cov_cutoff auto
+careful: velveth ${TMP_DIR} 91 -fastq.gz -shortPaired ${READS} && velvetg ${TMP_DIR} -cov_cutoff 10

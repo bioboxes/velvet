@@ -12,3 +12,8 @@ RUN mkdir ${ASSEMBLER_DIR}
 RUN cd ${ASSEMBLER_DIR} &&\
     wget --quiet --no-check-certificate ${ASSEMBLER_URL} --output-document - |\
     tar xzf - --directory . --strip-components=1 && eval ${ASSEMBLER_BLD}
+
+ADD run /usr/local/bin/
+ADD Taskfile /
+
+ENTRYPOINT ["run"]
