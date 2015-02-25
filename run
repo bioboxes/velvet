@@ -13,8 +13,7 @@ cat ${CONT_FASTQ_FILE_LISTING} | tr "\n" " " | xargs cat > ${READS}
 TMP_DIR=$(mktemp -d)
 
 # Determine which process to run
-TASK=$1
-CMD=$(egrep ^${TASK}: /Procfile | cut -f 2 -d ':')
+CMD=$(egrep ^${TASK}: /Taskfile | cut -f 2 -d ':')
 
 if [[ -z ${CMD} ]]; then
   echo "Abort, no task found for '${TASK}'."
