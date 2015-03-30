@@ -4,21 +4,16 @@ set -o errexit
 set -o xtrace
 set -o nounset
 
-READS=$(mktemp)
+INPUT=/bbx/input/assembler.yaml
+READS=$(yaml2json < ${INPUT} \
+        | jq --raw-output '.arguments[] | select(has("fastq")) | .fastq[].value | "-short \(.)"' \
+        | tr '\n' ' ')
 
-# Concatenate gzipped fastq files together
-cat ${CONT_FASTQ_FILE_LISTING} | tr "\n" " " | xargs cat > ${READS}
 
 # Location where to assemble reads
 TMP_DIR=$(mktemp -d)
 
-# Determine which process to run
-CMD=$(egrep ^${TASK}: /Taskfile | cut -f 2 -d ':')
+velveth ${TMP_DIR} 31 -fastq.gz ${READS}
+velvetg ${TMP_DIR} -cov_cutoff
 
-if [[ -z ${CMD} ]]; then
-  echo "Abort, no task found for '${TASK}'."
-  exit 1
-fi
-eval ${CMD}
-
-cp ${TMP_DIR}/contigs.fa ${CONT_CONTIGS_FILE}
+cp ${TMP_DIR}/contigs.fa /bbx/output
