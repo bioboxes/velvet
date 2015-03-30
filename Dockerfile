@@ -18,3 +18,9 @@ RUN cd /usr/local/bin && wget ${CONVERT} && chmod 700 yaml2json
 
 ENV JQ http://stedolan.github.io/jq/download/linux64/jq
 RUN cd /usr/local/bin && wget ${JQ} && chmod 700 jq
+
+ADD Taskfile /
+ADD assemble /usr/local/bin/
+
+ENTRYPOINT ["/bin/bash"]
+CMD ["assemble"]
