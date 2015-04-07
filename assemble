@@ -4,7 +4,7 @@ set -o errexit
 set -o xtrace
 set -o nounset
 
-INPUT=/bbx/input/assembler.yaml
+INPUT=/bbx/input/biobox.yml
 READS=$(yaml2json < ${INPUT} \
         | jq --raw-output '.arguments[] | select(has("fastq")) | .fastq[].value | "-short \(.)"' \
         | tr '\n' ' ')
