@@ -4,6 +4,7 @@ set -o errexit
 set -o nounset
 
 INPUT=/bbx/input/biobox.yaml
+OUTPUT=/bbx/output
 TASK=$1
 
 # Ensure the biobox.yml file is valid
@@ -25,4 +26,13 @@ if [[ -z ${CMD} ]]; then
 fi
 eval ${CMD}
 
-cp ${TMP_DIR}/contigs.fa /bbx/output
+cp ${TMP_DIR}/contigs.fa ${OUTPUT}
+
+cat << EOF > ${OUTPUT}/biobox.yaml
+version: 0.9.0
+arguments:
+  - fasta:
+      - id: velvet_contigs_1
+        value: contigs.fa
+        type: fasta
+EOF
