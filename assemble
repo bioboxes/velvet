@@ -21,7 +21,7 @@ TMP_DIR=$(mktemp -d)
 # Run the given task
 CMD=$(egrep ^${TASK}: /Taskfile | cut -f 2 -d ':')
 if [[ -z ${CMD} ]]; then
-  echo "Abort, no proc found for '${TASK}'."
+  echo "Abort, no task found for '${TASK}'."
   exit 1
 fi
 eval ${CMD}
@@ -32,7 +32,7 @@ cat << EOF > ${OUTPUT}/biobox.yaml
 version: 0.9.0
 arguments:
   - fasta:
-      - id: velvet_contigs_1
-        value: contigs.fa
-        type: fasta
+    - id: velvet_contigs_1
+      value: contigs.fa
+      type: contigs
 EOF
