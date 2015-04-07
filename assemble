@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+INPUT=/bbx/input/biobox.yaml
+OUTPUT=/bbx/output
+TASK=$1
+
+# Ensure the biobox.yml file is valid
+validate-input --input ${INPUT} --schema /bbx/validator/schema.yaml
+
+# Parse the read locations from this file
+READS=$(yaml2json < ${INPUT} \
+        | jq --raw-output '.arguments[] | select(has("fastq")) | .fastq[].value | "-short \(.)"' \
+        | tr '\n' ' ')
+
+
+TMP_DIR=$(mktemp -d)
+
+# Run the given task
+CMD=$(egrep ^${TASK}: /Taskfile | cut -f 2 -d ':')
+if [[ -z ${CMD} ]]; then
+  echo "Abort, no task found for '${TASK}'."
+  exit 1
+fi
+eval ${CMD}
+
+cp ${TMP_DIR}/contigs.fa ${OUTPUT}
+
+cat << EOF > ${OUTPUT}/biobox.yaml
+version: 0.9.0
+arguments:
+  - fasta:
+    - id: velvet_contigs_1
+      value: contigs.fa
+      type: contigs
+EOF
