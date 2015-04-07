@@ -1,13 +1,13 @@
 #!/bin/bash
 
 set -o errexit
-set -o xtrace
 set -o nounset
 
-INPUT=/bbx/input/biobox.yml
+INPUT=/bbx/input/biobox.yaml
+TASK=$1
 
 # Ensure the biobox.yml file is valid
-validate-input --input ${INPUT} --schema /bbx/validator/schema.json
+validate-input --input ${INPUT} --schema /bbx/validator/schema.yaml
 
 # Parse the read locations from this file
 READS=$(yaml2json < ${INPUT} \

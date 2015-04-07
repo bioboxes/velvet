@@ -31,10 +31,9 @@ RUN wget \
       --directory ${VALIDATOR} \
       --strip-components=1
 ENV PATH ${PATH}:${VALIDATOR}
-ADD schema.json ${VALIDATOR}
+ADD schema.yaml ${VALIDATOR}
 
 ADD Taskfile /
 ADD assemble /usr/local/bin/
 
-ENTRYPOINT ["/bin/bash"]
-CMD ["assemble"]
+ENTRYPOINT ["assemble"]
