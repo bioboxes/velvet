@@ -5,14 +5,17 @@ set -o xtrace
 set -o nounset
 
 INPUT=/bbx/input/biobox.yml
+
+# Ensure the biobox.yml file is valid
+validate-input --input ${INPUT} --schema /bbx/validator/schema.json
+
+# Parse the read locations from this file
 READS=$(yaml2json < ${INPUT} \
         | jq --raw-output '.arguments[] | select(has("fastq")) | .fastq[].value | "-short \(.)"' \
         | tr '\n' ' ')
 
 
-# Location where to assemble reads
 TMP_DIR=$(mktemp -d)
-
 velveth ${TMP_DIR} 31 -fastq.gz ${READS}
 velvetg ${TMP_DIR} -cov_cutoff auto
 
