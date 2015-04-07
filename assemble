@@ -16,7 +16,13 @@ READS=$(yaml2json < ${INPUT} \
 
 
 TMP_DIR=$(mktemp -d)
-velveth ${TMP_DIR} 31 -fastq.gz ${READS}
-velvetg ${TMP_DIR} -cov_cutoff auto
+
+# Run the given task
+CMD=$(egrep ^${TASK}: /Taskfile | cut -f 2 -d ':')
+if [[ -z ${CMD} ]]; then
+  echo "Abort, no proc found for '${TASK}'."
+  exit 1
+fi
+eval ${CMD}
 
 cp ${TMP_DIR}/contigs.fa /bbx/output
