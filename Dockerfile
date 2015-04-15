@@ -19,17 +19,18 @@ RUN cd /usr/local/bin && wget --quiet ${CONVERT} && chmod 700 yaml2json
 ENV JQ http://stedolan.github.io/jq/download/linux64/jq
 RUN cd /usr/local/bin && wget --quiet ${JQ} && chmod 700 jq
 
-ENV BASE_URL  https://s3-us-west-1.amazonaws.com/bioboxes-tools/validate-input
-ENV VERSION   validate-input-current.tar.xz
 ENV VALIDATOR /bbx/validator/
+ENV BASE_URL https://s3-us-west-1.amazonaws.com/bioboxes-tools/validate-biobox-file
+ENV VERSION  0.x.y
 RUN mkdir -p ${VALIDATOR}
 RUN wget \
       --quiet \
       --output-document -\
-      ${BASE_URL}/${VERSION} \
+      ${BASE_URL}/${VERSION}/validate-biobox-file.tar.xz \
     | tar xJf - \
       --directory ${VALIDATOR} \
       --strip-components=1
+
 ENV PATH ${PATH}:${VALIDATOR}
 ADD schema.yaml ${VALIDATOR}
 

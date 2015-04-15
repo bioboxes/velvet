@@ -8,7 +8,7 @@ OUTPUT=/bbx/output/bbx
 TASK=$1
 
 # Ensure the biobox.yml file is valid
-validate-input --input ${INPUT} --schema /bbx/validator/schema.yaml
+validate-biobox-file --input ${INPUT} --schema /bbx/validator/schema.yaml
 mkdir -p ${OUTPUT}
 
 # Parse the read locations from this file
