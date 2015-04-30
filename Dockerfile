@@ -1,8 +1,11 @@
 FROM ubuntu:14.04
 MAINTAINER Michael Barton, mail@michaelbarton.me.uk
 
+RUN echo "deb http://debian.bioboxes.org stable main" >> /etc/apt/sources.list
 ENV PACKAGES make gcc wget libc6-dev zlib1g-dev ca-certificates xz-utils
 RUN apt-get update -y && apt-get install -y --no-install-recommends ${PACKAGES}
+RUN apt-get install -y --no-install-recommends --allow-unauthenticated validate-biobox-file
+
 
 ENV ASSEMBLER_DIR /tmp/assembler
 ENV ASSEMBLER_URL https://www.ebi.ac.uk/~zerbino/velvet/velvet_1.2.10.tgz
@@ -19,20 +22,8 @@ RUN cd /usr/local/bin && wget --quiet ${CONVERT} && chmod 700 yaml2json
 ENV JQ http://stedolan.github.io/jq/download/linux64/jq
 RUN cd /usr/local/bin && wget --quiet ${JQ} && chmod 700 jq
 
-ENV VALIDATOR /bbx/validator/
-ENV BASE_URL https://s3-us-west-1.amazonaws.com/bioboxes-tools/validate-biobox-file
-ENV VERSION  0.x.y
-RUN mkdir -p ${VALIDATOR}
-RUN wget \
-      --quiet \
-      --output-document -\
-      ${BASE_URL}/${VERSION}/validate-biobox-file.tar.xz \
-    | tar xJf - \
-      --directory ${VALIDATOR} \
-      --strip-components=1
-
-ENV PATH ${PATH}:${VALIDATOR}
-ADD schema.yaml ${VALIDATOR}
+RUN mkdir /usr/share/bbx
+ADD schema.yaml /usr/share/bbx/
 
 ADD Taskfile /
 ADD assemble /usr/local/bin/
