@@ -25,6 +25,7 @@ validate-biobox-file \
   --schema /schema.yaml \
 
 mkdir -p ${OUTPUT}
+mkdir -p ${YAML_OUTPUT}
 
 # Parse the read locations from this file
 READS=$(yaml2json < ${INPUT} \
