@@ -7,16 +7,11 @@ set -o errexit
 set -o nounset
 
 INPUT=/bbx/input/biobox.yaml
-<<<<<<< HEAD
 OUTPUT=/bbx/output
 METADATA=/bbx/metadata
-=======
-YAML_OUTPUT=/bbx/output/bbx
-OUTPUT=/bbx/output
 
 # Since this script is the entrypoint to your container
 # you can access the task in `docker run task` as the first argument
->>>>>>> f36c3df... descriptons added
 TASK=$1
 
 # Ensure the biobox.yaml file is valid
@@ -25,7 +20,6 @@ validate-biobox-file \
   --schema /schema.yaml \
 
 mkdir -p ${OUTPUT}
-mkdir -p ${YAML_OUTPUT}
 
 # Parse the read locations from this file
 READS=$(yaml2json < ${INPUT} \
@@ -50,7 +44,7 @@ eval ${CMD}
 cp ${TMP_DIR}/contigs.fa ${OUTPUT}
 
 # This command writes yaml into the biobox.yaml until the EOF symbol is reached
-cat << EOF > ${YAML_OUTPUT}/biobox.yaml
+cat << EOF > ${OUTPUT}/biobox.yaml
 version: 0.9.0
 arguments:
   - fasta:
