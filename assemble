@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 
 INPUT=/bbx/input/biobox.yaml
-OUTPUT=/bbx/output/bbx
+OUTPUT=/bbx/output
 TASK=$1
 
 # Ensure the biobox.yml file is valid
