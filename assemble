@@ -37,6 +37,11 @@ if [[ -z ${CMD} ]]; then
   exit 1
 fi
 
+# if /bbx/metadata is mounted create log.txt
+if [ -d "$METADATA" ]; then
+  CMD="($CMD) >& $METADATA/log.txt"
+fi
+
 # Run the given task with eval.
 # Eval evaluates a String as if you would use it on a command line.
 eval ${CMD}
