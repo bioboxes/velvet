@@ -8,6 +8,7 @@ set -o nounset
 
 INPUT=/bbx/input/biobox.yaml
 OUTPUT=/bbx/output
+METADATA=/bbx/metadata
 
 # Since this script is the entrypoint to your container
 # you can access the task in `docker run task` as the first argument
@@ -34,6 +35,11 @@ CMD=$(egrep ^${TASK}: /Taskfile | cut -f 2 -d ':')
 if [[ -z ${CMD} ]]; then
   echo "Abort, no task found for '${TASK}'."
   exit 1
+fi
+
+# if /bbx/metadata is mounted create log.txt
+if [ -d "$METADATA" ]; then
+  CMD="($CMD) >& $METADATA/log.txt"
 fi
 
 # Run the given task with eval.
