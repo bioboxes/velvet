@@ -38,6 +38,11 @@ RUN wget \
 
 ENV PATH ${PATH}:${VALIDATOR}
 
+# download the assembler schema
+RUN wget \
+    --output-document /schema.yaml \
+    https://raw.githubusercontent.com/bioboxes/rfc/master/container/short-read-assembler/input_schema.yaml
+
 # Add Taskfile to /
 ADD Taskfile /
 
@@ -45,10 +50,5 @@ ADD Taskfile /
 # /usr/local/bin is appended to the $PATH variable what means that every script
 # in that directory will be executed in the shell  without providing the path.
 ADD assemble /usr/local/bin/
-
-# download the assembler schema
-RUN wget \
-    --output-document /schema.yaml \
-    https://raw.githubusercontent.com/bioboxes/rfc/master/container/short-read-assembler/input_schema.yaml
 
 ENTRYPOINT ["assemble"]
