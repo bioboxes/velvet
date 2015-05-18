@@ -13,14 +13,6 @@ RUN cd ${ASSEMBLER_DIR} &&\
     wget --quiet ${ASSEMBLER_URL} --output-document - |\
     tar xzf - --directory . --strip-components=1 && eval ${ASSEMBLER_BLD}
 
-ENV CONVERT https://github.com/bronze1man/yaml2json/raw/master/builds/linux_386/yaml2json
-# download yaml2json and make it executable
-RUN cd /usr/local/bin && wget --quiet ${CONVERT} && chmod 700 yaml2json
-
-ENV JQ http://stedolan.github.io/jq/download/linux64/jq
-# download jq and make it executable
-RUN cd /usr/local/bin && wget --quiet ${JQ} && chmod 700 jq
-
 # Locations for biobox file validator
 ENV VALIDATOR /bbx/validator/
 ENV BASE_URL https://s3-us-west-1.amazonaws.com/bioboxes-tools/validate-biobox-file
@@ -42,6 +34,14 @@ ENV PATH ${PATH}:${VALIDATOR}
 RUN wget \
     --output-document /schema.yaml \
     https://raw.githubusercontent.com/bioboxes/rfc/master/container/short-read-assembler/input_schema.yaml
+
+ENV CONVERT https://github.com/bronze1man/yaml2json/raw/master/builds/linux_386/yaml2json
+# download yaml2json and make it executable
+RUN cd /usr/local/bin && wget --quiet ${CONVERT} && chmod 700 yaml2json
+
+ENV JQ http://stedolan.github.io/jq/download/linux64/jq
+# download jq and make it executable
+RUN cd /usr/local/bin && wget --quiet ${JQ} && chmod 700 jq
 
 # Add Taskfile to /
 ADD Taskfile /
